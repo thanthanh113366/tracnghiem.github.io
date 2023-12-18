@@ -1,0 +1,26 @@
+name: Update File List
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-file-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: List files in answer directory
+        run: |
+          echo "$(ls answer)" > answer/filelist.txt
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add answer/filelist.txt
+          git commit -m "Update file list [skip ci]"
+          git push
