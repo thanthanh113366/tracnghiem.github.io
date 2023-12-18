@@ -35,31 +35,38 @@
             var quizDiv = document.getElementById("quiz");
             quizDiv.innerHTML = ""; // Clear previous questions
 
-            for (var i = 1; i <= numQuestions; i++) {
-                var questionDiv = document.createElement("div");
-                questionDiv.classList.add("question");
+            // Đọc nội dung từ tệp answers.txt (giả sử mỗi dòng là một câu trả lời)
+            fetch('answers.txt')
+                .then(response => response.text())
+                .then(data => {
+                    var correctAnswers = data.trim().split('\n').map(answer => answer.trim());
 
-                var questionText = document.createElement("p");
-                questionText.textContent = "Câu " + i + ": ABCD?";
-                questionDiv.appendChild(questionText);
+                    for (var i = 1; i <= numQuestions; i++) {
+                        var questionDiv = document.createElement("div");
+                        questionDiv.classList.add("question");
 
-                for (var j = 0; j < 4; j++) {
-                    var answerLabel = document.createElement("label");
-                    var answerInput = document.createElement("input");
-                    answerInput.type = "radio";
-                    answerInput.name = "q" + i;
-                    answerInput.value = String.fromCharCode(65 + j); // A, B, C, D
-                    answerLabel.appendChild(answerInput);
-                    answerLabel.appendChild(document.createTextNode(" " + String.fromCharCode(65 + j)));
-                    questionDiv.appendChild(answerLabel);
-                }
+                        var questionText = document.createElement("p");
+                        questionText.textContent = "Câu " + i + ": ABCD?";
+                        questionDiv.appendChild(questionText);
 
-                quizDiv.appendChild(questionDiv);
-            }
+                        for (var j = 0; j < 4; j++) {
+                            var answerLabel = document.createElement("label");
+                            var answerInput = document.createElement("input");
+                            answerInput.type = "radio";
+                            answerInput.name = "q" + i;
+                            answerInput.value = String.fromCharCode(65 + j); // A, B, C, D
+                            answerLabel.appendChild(answerInput);
+                            answerLabel.appendChild(document.createTextNode(" " + String.fromCharCode(65 + j)));
+                            questionDiv.appendChild(answerLabel);
+                        }
+
+                        quizDiv.appendChild(questionDiv);
+                    }
+                })
+                .catch(error => console.error('Error reading answers.txt:', error));
         }
 
         function checkAnswers() {
-            var correctAnswers = ["A", "B", "C"];
             var userAnswers = [];
 
             // Lấy câu trả lời từ người dùng
@@ -70,17 +77,25 @@
                 }
             }
 
-            // Kiểm tra đáp án
-            var score = 0;
-            for (var i = 0; i < correctAnswers.length; i++) {
-                if (userAnswers[i] === correctAnswers[i]) {
-                    score++;
-                }
-            }
+            // Đọc nội dung từ tệp answers.txt (giả sử mỗi dòng là một câu trả lời)
+            fetch('answers.txt')
+                .then(response => response.text())
+                .then(data => {
+                    var correctAnswers = data.trim().split('\n').map(answer => answer.trim());
 
-            // Hiển thị kết quả
-            var resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = "Số câu đúng: " + score + " / " + correctAnswers.length;
+                    // Kiểm tra đáp án
+                    var score = 0;
+                    for (var i = 0; i < correctAnswers.length; i++) {
+                        if (userAnswers[i] === correctAnswers[i]) {
+                            score++;
+                        }
+                    }
+
+                    // Hiển thị kết quả
+                    var resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = "Số câu đúng: " + score + " / " + correctAnswers.length;
+                })
+                .catch(error => console.error('Error reading answers.txt:', error));
         }
     </script>
 </body>
