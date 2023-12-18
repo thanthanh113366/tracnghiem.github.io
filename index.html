@@ -84,19 +84,21 @@
                 .then(data => {
                     // Extract A, B, C, D from the content of answers.txt
                     var correctAnswers = data.match(/[ABCD]/g);
-                    console.log(correctAnswers);
 
                     // Check answers
                     var score = 0;
+                    var resultDetails = "<ul>";
                     for (var i = 1; i <= userAnswers.length; i++) {
+                        resultDetails += "<li>Câu " + i + ": Đáp án đúng - " + correctAnswers[i - 1] + ". Câu bạn chọn - " + userAnswers[i - 1] + "</li>";
                         if (userAnswers[i - 1] === correctAnswers[i - 1]) {
                             score++;
                         }
                     }
+                    resultDetails += "</ul>";
 
                     // Display result
                     var resultDiv = document.getElementById("result");
-                    resultDiv.innerHTML = "Số câu đúng: " + score + " / " + userAnswers.length;
+                    resultDiv.innerHTML = "Số câu đúng: " + score + " / " + userAnswers.length + "<br>" + resultDetails;
                 })
                 .catch(error => console.error('Error reading answers.txt:', error));
         }
