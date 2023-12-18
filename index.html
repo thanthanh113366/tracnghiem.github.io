@@ -14,20 +14,21 @@
         }
         .question {
             margin-bottom: 20px;
-            background-color: #ffffff; /* Màu nền trắng */
+            background-color: #faf0f3; /* Màu nền trắng */
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .answer-label {
+        .answer-label:hover {
             display: inline-block;
-            margin-right: 20px;
+            padding: 5px;
+            background-color: rgb(152, 71, 140);
         }
         .answer-input {
             margin-left: 5px;
         }
         .correct-answer {
-            color: green;
+            color: rgb(98, 219, 88);
         }
         .wrong-answer {
             color: red;
@@ -66,6 +67,22 @@
             border-style:inset;
             font-style: oblique;
         }
+        #quiz {
+            padding: 5px;
+            color: rgb(202, 148, 194);
+            background-color: #e7c0cd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            font-style: oblique;
+        }
+        #result {
+            padding: 5px;
+            color: rgb(180, 118, 170);
+            background-color: #efd8e0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            font-style: oblique;
+        }
     </style>
 </head>
 <body>
@@ -81,7 +98,7 @@
         <button onclick="generateQuiz()">Tạo Câu Hỏi</button><br/><br/>
     </div>
 
-    <div id="quiz"></div>
+    <div id="quiz"></div><br/>
 
     <div>
         <button onclick="checkAnswers()">Kiểm Tra Đáp Án</button>
