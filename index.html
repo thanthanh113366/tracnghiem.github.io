@@ -59,19 +59,33 @@
     <div id="result"></div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var fileSelector = document.getElementById("fileSelector");
+
+            fetch('https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/filelist.txt')
+                .then(response => response.text())
+                .then(data => {
+                    var fileNames = data.trim().split('\n');
+                    fileNames.forEach(function (fileName) {
+                        var option = document.createElement("option");
+                        option.value = fileName;
+                        option.text = fileName;
+                        fileSelector.add(option);
+                    });
+                })
+                .catch(error => console.error('Error reading filelist.txt:', error));
+        });
+
         function generateQuiz() {
             var numQuestions = document.getElementById("numQuestions").value;
             var quizDiv = document.getElementById("quiz");
             quizDiv.innerHTML = ""; // Clear previous questions
 
-            // Lấy tên file từ dropdown
             var selectedFile = document.getElementById("fileSelector").value;
 
-            // Fetch answers from the selected file
-            fetch(selectedFile)
+            fetch(`https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/${selectedFile}`)
                 .then(response => response.text())
                 .then(data => {
-                    // Extract A, B, C, D from the content of the selected file
                     var correctAnswers = data.match(/[ABCD]/g);
 
                     for (var i = 0; i < numQuestions; i++) {
@@ -100,13 +114,12 @@
                         quizDiv.appendChild(questionDiv);
                     }
                 })
-                .catch(error => console.error('Error reading the selected file:', error));
+                .catch(error => console.error(`Error reading ${selectedFile}:`, error));
         }
 
         function checkAnswers() {
             var userAnswers = [];
 
-            // Get user answers
             for (var i = 1; i <= parseInt(document.getElementById("numQuestions").value); i++) {
                 var answer = document.querySelector('input[name="q' + i + '"]:checked');
                 if (answer) {
@@ -114,17 +127,13 @@
                 }
             }
 
-            // Lấy tên file từ dropdown
             var selectedFile = document.getElementById("fileSelector").value;
 
-            // Fetch answers from the selected file
-            fetch(selectedFile)
+            fetch(`https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/${selectedFile}`)
                 .then(response => response.text())
                 .then(data => {
-                    // Extract A, B, C, D from the content of the selected file
                     var correctAnswers = data.match(/[ABCD]/g);
 
-                    // Check answers
                     var resultDetails = "<ul>";
                     var correctCount = 0;
                     for (var i = 1; i <= userAnswers.length; i++) {
@@ -139,30 +148,11 @@
                     }
                     resultDetails += "</ul>";
 
-                    // Display result
                     var resultDiv = document.getElementById("result");
                     resultDiv.innerHTML = "Số câu đúng: " + correctCount + " / " + userAnswers.length + resultDetails;
                 })
-                .catch(error => console.error('Error reading the selected file:', error));
+                .catch(error => console.error(`Error reading ${selectedFile}:`, error));
         }
-
-        // Tự động đọc các file có đuôi .txt trong cùng thư mục và thêm chúng vào dropdown
-        document.addEventListener("DOMContentLoaded", function () {
-            var fileSelector = document.getElementById("fileSelector");
-
-            fetch('filelist.txt') // Thay 'filelist.txt' bằng tên file chứa danh sách các file .txt
-                .then(response => response.text())
-                .then(data => {
-                    var fileNames = data.trim().split('\n');
-                    fileNames.forEach(function (fileName) {
-                        var option = document.createElement("option");
-                        option.value = fileName;
-                        option.text = fileName;
-                        fileSelector.add(option);
-                    });
-                })
-                .catch(error => console.error('Error reading filelist.txt:', error));
-        });
     </script>
 </body>
 </html>
