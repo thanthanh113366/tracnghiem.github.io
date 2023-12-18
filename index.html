@@ -11,9 +11,6 @@
         .question {
             margin-bottom: 10px;
         }
-        .correct-answer {
-            color: green;
-        }
         .wrong-answer {
             color: red;
         }
@@ -92,23 +89,20 @@
                     var correctAnswers = data.match(/[ABCD]/g);
 
                     // Check answers
-                    var score = 0;
                     var resultDetails = "<ul>";
                     for (var i = 1; i <= userAnswers.length; i++) {
                         var isCorrect = userAnswers[i - 1] === correctAnswers[i - 1];
-                        resultDetails += "<li>Câu " + i + ": " +
-                            (isCorrect ? "<span class='correct-answer'>Đúng</span>" : "<span class='wrong-answer'>Sai</span>") +
-                            " - Đáp án đúng: <span class='correct-answer'>" + correctAnswers[i - 1] + "</span>" +
-                            ", Đáp án bạn chọn: " + userAnswers[i - 1] + "</li>";
-                        if (isCorrect) {
-                            score++;
+                        if (!isCorrect) {
+                            resultDetails += "<li class='wrong-answer'>Câu " + i + ": " +
+                                "Sai - Đáp án đúng: <span class='wrong-answer'>" + correctAnswers[i - 1] + "</span>" +
+                                ", Đáp án bạn chọn: " + userAnswers[i - 1] + "</li>";
                         }
                     }
                     resultDetails += "</ul>";
 
                     // Display result
                     var resultDiv = document.getElementById("result");
-                    resultDiv.innerHTML = "Số câu đúng: " + score + " / " + userAnswers.length + "<br>" + resultDetails;
+                    resultDiv.innerHTML = resultDetails;
                 })
                 .catch(error => console.error('Error reading answers.txt:', error));
         }
