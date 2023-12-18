@@ -15,29 +15,55 @@
 </head>
 <body>
 
-    <div id="quiz">
-        <div class="question">
-            <p>Câu 1: ABCD?</p>
-            <input type="radio" name="q1" value="A"> A
-            <input type="radio" name="q1" value="B"> B
-            <input type="radio" name="q1" value="C"> C
-            <input type="radio" name="q1" value="D"> D
-        </div>
+    <div>
+        <label for="numQuestions">Nhập số lượng câu hỏi:</label>
+        <input type="number" id="numQuestions" min="1" value="3">
+        <button onclick="generateQuiz()">Tạo Câu Hỏi</button>
+    </div>
 
-        <!-- Thêm các câu hỏi khác tương tự -->
+    <div id="quiz"></div>
 
+    <div>
         <button onclick="checkAnswers()">Kiểm Tra Đáp Án</button>
     </div>
 
     <div id="result"></div>
 
     <script>
+        function generateQuiz() {
+            var numQuestions = document.getElementById("numQuestions").value;
+            var quizDiv = document.getElementById("quiz");
+            quizDiv.innerHTML = ""; // Clear previous questions
+
+            for (var i = 1; i <= numQuestions; i++) {
+                var questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+
+                var questionText = document.createElement("p");
+                questionText.textContent = "Câu " + i + ": ABCD?";
+                questionDiv.appendChild(questionText);
+
+                for (var j = 0; j < 4; j++) {
+                    var answerLabel = document.createElement("label");
+                    var answerInput = document.createElement("input");
+                    answerInput.type = "radio";
+                    answerInput.name = "q" + i;
+                    answerInput.value = String.fromCharCode(65 + j); // A, B, C, D
+                    answerLabel.appendChild(answerInput);
+                    answerLabel.appendChild(document.createTextNode(" " + String.fromCharCode(65 + j)));
+                    questionDiv.appendChild(answerLabel);
+                }
+
+                quizDiv.appendChild(questionDiv);
+            }
+        }
+
         function checkAnswers() {
-            var correctAnswers = ["A", "B", "C"]; // Thay đổi theo đáp án đúng của bạn
+            var correctAnswers = ["A", "B", "C"];
             var userAnswers = [];
-            
+
             // Lấy câu trả lời từ người dùng
-            for (var i = 1; i <= 3; i++) { // Thay đổi số câu hỏi tương ứng
+            for (var i = 1; i <= parseInt(document.getElementById("numQuestions").value); i++) {
                 var answer = document.querySelector('input[name="q' + i + '"]:checked');
                 if (answer) {
                     userAnswers.push(answer.value);
