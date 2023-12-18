@@ -113,7 +113,6 @@
         <label for="numQuestions">Nhập số lượng câu hỏi</label>
         <input type="number" id="numQuestions" min="1" value="3"><br/><br/>
         
-        <!-- Thêm chức năng lựa chọn file -->
         <label for="fileSelector">Chọn File Answers</label>
         <select id="fileSelector"></select><br/><br/>
         
@@ -128,12 +127,29 @@
 
     <div id="result"></div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
+
     <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyB9Zj_Qa0upxz6lGDaCHLc9h9Ur-QR7jUk",
+            authDomain: "tracnghiem-d6eb4.firebaseapp.com",
+            projectId: "tracnghiem-d6eb4",
+            storageBucket: "tracnghiem-d6eb4.appspot.com",
+            messagingSenderId: "132992308492",
+            appId: "1:132992308492:web:42fcfe68701fa7a494e529",
+            measurementId: "G-YXGF2ZZX02"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        var database = firebase.database();
+        var historyRef = database.ref('userHistory');
+
         document.addEventListener("DOMContentLoaded", function () {
             var fileSelector = document.getElementById("fileSelector");
 
             fetch('https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/filelist.txt')
-            // fetch('file:///D:/tracnghiem.github.io-main/answer/filelist.txt')
                 .then(response => response.text())
                 .then(data => {
                     var fileNames = data.trim().split('\n');
@@ -150,12 +166,11 @@
         function generateQuiz() {
             var numQuestions = document.getElementById("numQuestions").value;
             var quizDiv = document.getElementById("quiz");
-            quizDiv.innerHTML = ""; // Clear previous questions
+            quizDiv.innerHTML = "";
 
             var selectedFile = document.getElementById("fileSelector").value;
 
             fetch(`https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/${selectedFile}`)
-            // fetch(`file:///D:/tracnghiem.github.io-main/answer/${selectedFile}`)
                 .then(response => response.text())
                 .then(data => {
                     var correctAnswers = data.match(/[ABCD]/g);
@@ -175,7 +190,7 @@
                             var answerInput = document.createElement("input");
                             answerInput.type = "radio";
                             answerInput.name = "q" + (i + 1);
-                            answerInput.value = String.fromCharCode(65 + j); // A, B, C, D
+                            answerInput.value = String.fromCharCode(65 + j);
                             answerInput.classList.add("answer-input");
 
                             answerLabel.appendChild(answerInput);
@@ -202,7 +217,6 @@
             var selectedFile = document.getElementById("fileSelector").value;
 
             fetch(`https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/${selectedFile}`)
-            // fetch(`file:///D:/tracnghiem.github.io-main/answer/${selectedFile}`)
                 .then(response => response.text())
                 .then(data => {
                     var correctAnswers = data.match(/[ABCD]/g);
@@ -218,6 +232,9 @@
                         var answerClass = isCorrect ? "correct-answer" : "wrong-answer";
                         resultDetails += "<li class='" + answerClass + "'>Câu " + i + ": " +
                             "Đáp án bạn chọn: " + userAnswers[i - 1] + "</li>";
+                        
+                        // Lưu lịch sử đáp án vào Firebase
+                        saveAnswerHistory(i, userAnswers[i - 1]);
                     }
                     resultDetails += "</ul>";
 
@@ -225,6 +242,15 @@
                     resultDiv.innerHTML = "Số câu đúng: " + correctCount + " / " + userAnswers.length + resultDetails;
                 })
                 .catch(error => console.error(`Error reading ${selectedFile}:`, error));
+        }
+
+        function saveAnswerHistory(questionNumber, selectedAnswer) {
+            var userId = "YOUR_USER_ID"; // Thay bằng ID người dùng hoặc thông tin đăng nhập
+
+            historyRef.child(userId).push({
+                questionNumber: questionNumber,
+                selectedAnswer: selectedAnswer
+            });
         }
     </script>
 </body>
