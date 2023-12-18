@@ -11,8 +11,18 @@
         .question {
             margin-bottom: 10px;
         }
+        .correct-answer {
+            color: green;
+        }
         .wrong-answer {
             color: red;
+        }
+        .answer-label {
+            display: flex;
+            align-items: center;
+        }
+        .answer-input {
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -55,12 +65,16 @@
 
                         for (var j = 0; j < 4; j++) {
                             var answerLabel = document.createElement("label");
+                            answerLabel.classList.add("answer-label");
+
                             var answerInput = document.createElement("input");
                             answerInput.type = "radio";
                             answerInput.name = "q" + (i + 1);
                             answerInput.value = String.fromCharCode(65 + j); // A, B, C, D
-                            answerLabel.appendChild(answerInput);
+                            answerInput.classList.add("answer-input");
+
                             answerLabel.appendChild(document.createTextNode(" " + String.fromCharCode(65 + j)));
+                            answerLabel.appendChild(answerInput);
                             questionDiv.appendChild(answerLabel);
                         }
 
@@ -90,19 +104,22 @@
 
                     // Check answers
                     var resultDetails = "<ul>";
+                    var correctCount = 0;
                     for (var i = 1; i <= userAnswers.length; i++) {
                         var isCorrect = userAnswers[i - 1] === correctAnswers[i - 1];
-                        if (!isCorrect) {
-                            resultDetails += "<li class='wrong-answer'>Câu " + i + ": " +
-                                "Sai - Đáp án đúng: <span class='wrong-answer'>" + correctAnswers[i - 1] + "</span>" +
-                                ", Đáp án bạn chọn: " + userAnswers[i - 1] + "</li>";
+                        if (isCorrect) {
+                            correctCount++;
                         }
+
+                        var answerClass = isCorrect ? "correct-answer" : "wrong-answer";
+                        resultDetails += "<li class='" + answerClass + "'>Câu " + i + ": " +
+                            "Đáp án bạn chọn: " + userAnswers[i - 1] + "</li>";
                     }
                     resultDetails += "</ul>";
 
                     // Display result
                     var resultDiv = document.getElementById("result");
-                    resultDiv.innerHTML = resultDetails;
+                    resultDiv.innerHTML = "Số câu đúng: " + correctCount + " / " + userAnswers.length + resultDetails;
                 })
                 .catch(error => console.error('Error reading answers.txt:', error));
         }
