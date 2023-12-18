@@ -1,3 +1,5 @@
 De1.txt
-De2.txt
-De3.txt
+logic_2_13.txt
+logic_14_20.txt
+solieu_1_10.txt
+solieu_11_20.txt
