@@ -8,24 +8,11 @@
         body {
             font-family: Arial, sans-serif;
         }
-        .question-group {
-            margin-bottom: 20px;
-        }
         .question {
             margin-bottom: 10px;
         }
-        .correct-answer {
-            color: green;
-        }
         .wrong-answer {
             color: red;
-        }
-        .answer-label {
-            display: flex;
-            align-items: center;
-        }
-        .answer-input {
-            margin-right: 5px;
         }
     </style>
 </head>
@@ -58,42 +45,26 @@
                     // Extract A, B, C, D from the content of answers.txt
                     var correctAnswers = data.match(/[ABCD]/g);
 
-                    // Divide questions into 4 groups (A, B, C, D)
-                    var questionGroups = [[], [], [], []];
-                    for (var i = 0; i < 120; i++) {
-                        questionGroups[i % 4].push("Câu " + (i + 1) + ": ABCD?");
-                    }
-
-                    // Display questions
                     for (var i = 0; i < numQuestions; i++) {
-                        var groupDiv = document.createElement("div");
-                        groupDiv.classList.add("question-group");
+                        var questionDiv = document.createElement("div");
+                        questionDiv.classList.add("question");
 
                         var questionText = document.createElement("p");
-                        questionText.textContent = "Nhóm " + String.fromCharCode(65 + i);
-                        groupDiv.appendChild(questionText);
+                        questionText.textContent = "Câu " + (i + 1) + ": ABCD?";
+                        questionDiv.appendChild(questionText);
 
-                        for (var j = 0; j < questionGroups[i].length; j++) {
-                            var questionDiv = document.createElement("div");
-                            questionDiv.classList.add("question");
-                            questionDiv.innerHTML = questionGroups[i][j];
-
-                            // Change the position of the radio button
-                            var radioButtons = questionDiv.querySelectorAll('input[type="radio"]');
-                            for (var k = 0; k < radioButtons.length; k++) {
-                                var answerLabel = document.createElement("label");
-                                answerLabel.classList.add("answer-label");
-
-                                answerLabel.appendChild(radioButtons[k]);
-                                answerLabel.appendChild(document.createTextNode(" " + String.fromCharCode(65 + k)));
-
-                                questionDiv.appendChild(answerLabel);
-                            }
-
-                            groupDiv.appendChild(questionDiv);
+                        for (var j = 0; j < 4; j++) {
+                            var answerLabel = document.createElement("label");
+                            var answerInput = document.createElement("input");
+                            answerInput.type = "radio";
+                            answerInput.name = "q" + (i + 1);
+                            answerInput.value = String.fromCharCode(65 + j); // A, B, C, D
+                            answerLabel.appendChild(answerInput);
+                            answerLabel.appendChild(document.createTextNode(" " + String.fromCharCode(65 + j)));
+                            questionDiv.appendChild(answerLabel);
                         }
 
-                        quizDiv.appendChild(groupDiv);
+                        quizDiv.appendChild(questionDiv);
                     }
                 })
                 .catch(error => console.error('Error reading answers.txt:', error));
