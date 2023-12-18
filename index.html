@@ -45,11 +45,7 @@
         
         <!-- Thêm chức năng lựa chọn file -->
         <label for="fileSelector">Chọn File Answers:</label>
-        <select id="fileSelector">
-            <option value="answers1.txt">Answers 1</option>
-            <option value="answers2.txt">Answers 2</option>
-            <!-- Thêm các option khác nếu cần -->
-        </select>
+        <select id="fileSelector"></select>
         
         <button onclick="generateQuiz()">Tạo Câu Hỏi</button>
     </div>
@@ -149,6 +145,24 @@
                 })
                 .catch(error => console.error('Error reading the selected file:', error));
         }
+
+        // Tự động đọc các file có đuôi .txt trong cùng thư mục và thêm chúng vào dropdown
+        document.addEventListener("DOMContentLoaded", function () {
+            var fileSelector = document.getElementById("fileSelector");
+
+            fetch('filelist.txt') // Thay 'filelist.txt' bằng tên file chứa danh sách các file .txt
+                .then(response => response.text())
+                .then(data => {
+                    var fileNames = data.trim().split('\n');
+                    fileNames.forEach(function (fileName) {
+                        var option = document.createElement("option");
+                        option.value = fileName;
+                        option.text = fileName;
+                        fileSelector.add(option);
+                    });
+                })
+                .catch(error => console.error('Error reading filelist.txt:', error));
+        });
     </script>
 </body>
 </html>
