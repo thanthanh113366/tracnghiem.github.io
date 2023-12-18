@@ -11,6 +11,12 @@
         .question {
             margin-bottom: 10px;
         }
+        .correct-answer {
+            color: green;
+        }
+        .wrong-answer {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -89,8 +95,12 @@
                     var score = 0;
                     var resultDetails = "<ul>";
                     for (var i = 1; i <= userAnswers.length; i++) {
-                        resultDetails += "<li>Câu " + i + ": Đáp án đúng - " + correctAnswers[i - 1] + ". Câu bạn chọn - " + userAnswers[i - 1] + "</li>";
-                        if (userAnswers[i - 1] === correctAnswers[i - 1]) {
+                        var isCorrect = userAnswers[i - 1] === correctAnswers[i - 1];
+                        resultDetails += "<li>Câu " + i + ": " +
+                            (isCorrect ? "<span class='correct-answer'>Đúng</span>" : "<span class='wrong-answer'>Sai</span>") +
+                            " - Đáp án đúng: <span class='correct-answer'>" + correctAnswers[i - 1] + "</span>" +
+                            ", Đáp án bạn chọn: " + userAnswers[i - 1] + "</li>";
+                        if (isCorrect) {
                             score++;
                         }
                     }
