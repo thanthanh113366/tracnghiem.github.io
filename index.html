@@ -7,44 +7,36 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5; /* Màu nền pastel */
+            background-color: #fce4ec; /* Màu nền hồng nhạt */
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
-
-        button {
-            background-color: #ffb6c1; /* Màu hồng pastel cho nút bấm */
-            color: #fff; /* Màu chữ trắng */
-            border: none;
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
+        .question {
+            margin-bottom: 20px;
+            background-color: #ffffff; /* Màu nền trắng */
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
-        button:hover {
-            background-color: #ff69b4; /* Màu hồng pastel khi di chuột vào nút */
+        .answer-label {
+            display: inline-block;
+            margin-right: 20px;
         }
-
-        #quiz {
+        .answer-input {
+            margin-left: 5px;
+        }
+        .correct-answer {
+            color: green;
+        }
+        .wrong-answer {
+            color: red;
+        }
+        #result {
             margin-top: 20px;
         }
-
-        .question {
-            margin-bottom: 15px;
-        }
-
-        .wrong-answer {
-            color: #e74c3c; /* Màu đỏ cho câu trả lời sai */
-        }
     </style>
-</head> 
+</head>
 <body>
 
     <div>
