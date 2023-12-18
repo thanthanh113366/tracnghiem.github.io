@@ -8,7 +8,7 @@
         body {
             font-family: 'Arial', sans-serif;
             background-color: #fce4ec; /* Màu nền hồng nhạt */
-            margin: 0;
+            margin: 5;
             padding: 20px;
             box-sizing: border-box;
         }
@@ -35,19 +35,50 @@
         #result {
             margin-top: 20px;
         }
+        #numQuestions {
+            color: #f9e3ea;
+            background-color: rgb(202, 148, 194);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2px;
+        }
+        #fileSelector {
+            color: #f9e3ea;
+            background-color: rgb(202, 148, 194);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2px;
+        }
+        button {
+            color: #f9e3ea;
+            background-color: rgb(202, 148, 194);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            font-style: oblique;
+        }
+        label {
+            padding: 5px;
+            color: #f9e3ea;
+            background-color: rgb(202, 148, 194);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-style:inset;
+            font-style: oblique;
+        }
     </style>
 </head>
 <body>
 
     <div>
-        <label for="numQuestions">Nhập số lượng câu hỏi:</label>
-        <input type="number" id="numQuestions" min="1" value="3">
+        <label for="numQuestions">Nhập số lượng câu hỏi</label>
+        <input type="number" id="numQuestions" min="1" value="3"><br/><br/>
         
         <!-- Thêm chức năng lựa chọn file -->
-        <label for="fileSelector">Chọn File Answers:</label>
-        <select id="fileSelector"></select>
+        <label for="fileSelector">Chọn File Answers</label>
+        <select id="fileSelector"></select><br/><br/>
         
-        <button onclick="generateQuiz()">Tạo Câu Hỏi</button>
+        <button onclick="generateQuiz()">Tạo Câu Hỏi</button><br/><br/>
     </div>
 
     <div id="quiz"></div>
@@ -63,6 +94,7 @@
             var fileSelector = document.getElementById("fileSelector");
 
             fetch('https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/filelist.txt')
+            // fetch('file:///D:/tracnghiem.github.io-main/answer/filelist.txt')
                 .then(response => response.text())
                 .then(data => {
                     var fileNames = data.trim().split('\n');
@@ -84,6 +116,7 @@
             var selectedFile = document.getElementById("fileSelector").value;
 
             fetch(`https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/${selectedFile}`)
+            // fetch(`file:///D:/tracnghiem.github.io-main/answer/${selectedFile}`)
                 .then(response => response.text())
                 .then(data => {
                     var correctAnswers = data.match(/[ABCD]/g);
@@ -130,6 +163,7 @@
             var selectedFile = document.getElementById("fileSelector").value;
 
             fetch(`https://raw.githubusercontent.com/thanthanh113366/tracnghiem.github.io/main/answer/${selectedFile}`)
+            // fetch(`file:///D:/tracnghiem.github.io-main/answer/${selectedFile}`)
                 .then(response => response.text())
                 .then(data => {
                     var correctAnswers = data.match(/[ABCD]/g);
