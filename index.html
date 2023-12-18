@@ -35,25 +35,25 @@
             var quizDiv = document.getElementById("quiz");
             quizDiv.innerHTML = ""; // Clear previous questions
 
-            // Đọc nội dung từ tệp answers.txt (giả sử mỗi dòng là một câu trả lời)
+            // Fetch answers from answers.txt
             fetch('answers.txt')
                 .then(response => response.text())
                 .then(data => {
-                    var correctAnswers = data.trim().split('\n').map(answer => answer.trim());
+                    var answersArray = data.trim().split('\t');
 
-                    for (var i = 1; i <= numQuestions; i++) {
+                    for (var i = 0; i < numQuestions; i++) {
                         var questionDiv = document.createElement("div");
                         questionDiv.classList.add("question");
 
                         var questionText = document.createElement("p");
-                        questionText.textContent = "Câu " + i + ": ABCD?";
+                        questionText.textContent = "Câu " + (i + 1) + ": ABCD?";
                         questionDiv.appendChild(questionText);
 
                         for (var j = 0; j < 4; j++) {
                             var answerLabel = document.createElement("label");
                             var answerInput = document.createElement("input");
                             answerInput.type = "radio";
-                            answerInput.name = "q" + i;
+                            answerInput.name = "q" + (i + 1);
                             answerInput.value = String.fromCharCode(65 + j); // A, B, C, D
                             answerLabel.appendChild(answerInput);
                             answerLabel.appendChild(document.createTextNode(" " + String.fromCharCode(65 + j)));
@@ -69,7 +69,7 @@
         function checkAnswers() {
             var userAnswers = [];
 
-            // Lấy câu trả lời từ người dùng
+            // Get user answers
             for (var i = 1; i <= parseInt(document.getElementById("numQuestions").value); i++) {
                 var answer = document.querySelector('input[name="q' + i + '"]:checked');
                 if (answer) {
@@ -77,23 +77,23 @@
                 }
             }
 
-            // Đọc nội dung từ tệp answers.txt (giả sử mỗi dòng là một câu trả lời)
+            // Fetch answers from answers.txt
             fetch('answers.txt')
                 .then(response => response.text())
                 .then(data => {
-                    var correctAnswers = data.trim().split('\n').map(answer => answer.trim());
+                    var correctAnswers = data.trim().split('\t');
 
-                    // Kiểm tra đáp án
+                    // Check answers
                     var score = 0;
-                    for (var i = 0; i < correctAnswers.length; i++) {
-                        if (userAnswers[i] === correctAnswers[i]) {
+                    for (var i = 1; i <= userAnswers.length; i++) {
+                        if (userAnswers[i - 1] === correctAnswers[i * 2 - 1]) {
                             score++;
                         }
                     }
 
-                    // Hiển thị kết quả
+                    // Display result
                     var resultDiv = document.getElementById("result");
-                    resultDiv.innerHTML = "Số câu đúng: " + score + " / " + correctAnswers.length;
+                    resultDiv.innerHTML = "Số câu đúng: " + score + " / " + userAnswers.length;
                 })
                 .catch(error => console.error('Error reading answers.txt:', error));
         }
