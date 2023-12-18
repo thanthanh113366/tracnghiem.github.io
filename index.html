@@ -39,7 +39,8 @@
             fetch('answers.txt')
                 .then(response => response.text())
                 .then(data => {
-                    var answersArray = data.trim().split('\t');
+                    // Extract A, B, C, D from the content of answers.txt
+                    var correctAnswers = data.match(/[ABCD]/g);
 
                     for (var i = 0; i < numQuestions; i++) {
                         var questionDiv = document.createElement("div");
@@ -81,12 +82,13 @@
             fetch('answers.txt')
                 .then(response => response.text())
                 .then(data => {
-                    var correctAnswers = data.trim().split('\t');
+                    // Extract A, B, C, D from the content of answers.txt
+                    var correctAnswers = data.match(/[ABCD]/g);
 
                     // Check answers
                     var score = 0;
                     for (var i = 1; i <= userAnswers.length; i++) {
-                        if (userAnswers[i - 1] === correctAnswers[i * 2 - 1]) {
+                        if (userAnswers[i - 1] === correctAnswers[i - 1]) {
                             score++;
                         }
                     }
